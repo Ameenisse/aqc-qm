@@ -1,0 +1,406 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a4bb3"/>
+      <stop offset="25%" stop-color="#1063d8"/>
+      <stop offset="60%" stop-color="#093d88"/>
+      <stop offset="100%" stop-color="#041a42"/>
+    </linearGradient>
+
+    <!-- Outer Squircle Bevel Gradient -->
+    <linearGradient id="squircleBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#448aff"/>
+      <stop offset="50%" stop-color="#1976d2"/>
+      <stop offset="100%" stop-color="#0d47a1"/>
+    </linearGradient>
+
+    <!-- Gold Gradients with Realistic Specular Sheen -->
+    <linearGradient id="goldMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe57f"/>
+      <stop offset="18%" stop-color="#ffd54f"/>
+      <stop offset="40%" stop-color="#fff9c4"/>
+      <stop offset="65%" stop-color="#f57f17"/>
+      <stop offset="85%" stop-color="#d4a017"/>
+      <stop offset="100%" stop-color="#ffe082"/>
+    </linearGradient>
+
+    <linearGradient id="goldTrim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff8e1"/>
+      <stop offset="50%" stop-color="#ffb300"/>
+      <stop offset="100%" stop-color="#e65100"/>
+    </linearGradient>
+
+    <!-- Podium Gradients -->
+    <linearGradient id="podiumGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d3f82"/>
+      <stop offset="40%" stop-color="#0a3268"/>
+      <stop offset="100%" stop-color="#041c3e"/>
+    </linearGradient>
+
+    <linearGradient id="podiumInner" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#093166"/>
+      <stop offset="100%" stop-color="#031633"/>
+    </linearGradient>
+
+    <!-- Floor Glow -->
+    <radialGradient id="stageSpotlight" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff9c4" stop-opacity="0.45"/>
+      <stop offset="40%" stop-color="#ffd54f" stop-opacity="0.25"/>
+      <stop offset="80%" stop-color="#1565c0" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#031633" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Arch Center Backdrop Light -->
+    <radialGradient id="alcoveLight" cx="50%" cy="38%" r="48%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#fffde7" stop-opacity="0.95"/>
+      <stop offset="70%" stop-color="#f1f8fe" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#c5cae9" stop-opacity="0.4"/>
+    </radialGradient>
+
+    <!-- Glow Filter for Lanterns and Stage Lights -->
+    <filter id="fanoosGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#020e24" flood-opacity="0.6"/>
+    </filter>
+
+    <!-- App Icon Squircle Clip -->
+    <clipPath id="appIconClip">
+      <rect x="0" y="0" width="512" height="512" rx="112" ry="112"/>
+    </clipPath>
+  </defs>
+
+  <!-- Root Icon Squircle -->
+  <g clip-path="url(#appIconClip)">
+    <!-- Base Background Sky -->
+    <rect width="512" height="512" fill="url(#skyGrad)"/>
+
+    <!-- Geometric Arabesque Pattern Overlay (Upper Background) -->
+    <g opacity="0.14" stroke="#ffffff" stroke-width="1.2" fill="none">
+      <!-- Star Polygon Lattice -->
+      <g transform="translate(256, 120)">
+        <circle r="90"/>
+        <polygon points="0,-85 60,-60 85,0 60,60 0,85 -60,60 -85,0 -60,-60"/>
+        <polygon points="0,-85 60,-60 85,0 60,60 0,85 -60,60 -85,0 -60,-60" transform="rotate(22.5)"/>
+        <polygon points="0,-50 35,-35 50,0 35,35 0,50 -35,35 -50,0 -35,-35"/>
+      </g>
+      <!-- Side Wall Star Patterns -->
+      <g transform="translate(68, 220)">
+        <polygon points="0,-35 25,-25 35,0 25,25 0,35 -25,25 -35,0 -25,-25"/>
+        <polygon points="0,-35 25,-25 35,0 25,25 0,35 -25,25 -35,0 -25,-25" transform="rotate(45)"/>
+      </g>
+      <g transform="translate(444, 220)">
+        <polygon points="0,-35 25,-25 35,0 25,25 0,35 -25,25 -35,0 -25,-25"/>
+        <polygon points="0,-35 25,-25 35,0 25,25 0,35 -25,25 -35,0 -25,-25" transform="rotate(45)"/>
+      </g>
+    </g>
+
+    <!-- Left Arched Mashrabiya Window Niche -->
+    <g transform="translate(32, 160)" filter="url(#softShadow)">
+      <!-- Outer Arch Frame -->
+      <path d="M0,240 L0,70 Q0,0 36,0 Q72,0 72,70 L72,240 Z" fill="#062552" stroke="url(#goldMetallic)" stroke-width="5"/>
+      <!-- Inner Gold Arabesque Grille -->
+      <path d="M8,235 L8,74 Q8,8 36,8 Q64,8 64,74 L64,235 Z" fill="#ffecb3" fill-opacity="0.15" stroke="url(#goldTrim)" stroke-width="2"/>
+      <!-- Lattice intersections -->
+      <g stroke="#ffd54f" stroke-width="1.2" opacity="0.6">
+        <line x1="8" y1="80" x2="64" y2="80"/>
+        <line x1="8" y1="110" x2="64" y2="110"/>
+        <line x1="8" y1="140" x2="64" y2="140"/>
+        <line x1="8" y1="170" x2="64" y2="170"/>
+        <line x1="8" y1="200" x2="64" y2="200"/>
+        <line x1="36" y1="8" x2="36" y2="235"/>
+        <!-- Star rosettes inside window -->
+        <circle cx="36" cy="110" r="10" fill="none"/>
+        <circle cx="36" cy="170" r="10" fill="none"/>
+      </g>
+      <!-- Warm Interior Glow -->
+      <circle cx="36" cy="140" r="22" fill="#fff9c4" opacity="0.55" filter="url(#fanoosGlow)"/>
+    </g>
+
+    <!-- Right Arched Mashrabiya Window Niche -->
+    <g transform="translate(408, 160)" filter="url(#softShadow)">
+      <path d="M0,240 L0,70 Q0,0 36,0 Q72,0 72,240 Z" fill="#062552" stroke="url(#goldMetallic)" stroke-width="5"/>
+      <path d="M8,235 L8,74 Q8,8 36,8 Q64,8 64,74 L64,235 Z" fill="#ffecb3" fill-opacity="0.15" stroke="url(#goldTrim)" stroke-width="2"/>
+      <g stroke="#ffd54f" stroke-width="1.2" opacity="0.6">
+        <line x1="8" y1="80" x2="64" y2="80"/>
+        <line x1="8" y1="110" x2="64" y2="110"/>
+        <line x1="8" y1="140" x2="64" y2="140"/>
+        <line x1="8" y1="170" x2="64" y2="170"/>
+        <line x1="8" y1="200" x2="64" y2="200"/>
+        <line x1="36" y1="8" x2="36" y2="235"/>
+        <circle cx="36" cy="110" r="10" fill="none"/>
+        <circle cx="36" cy="170" r="10" fill="none"/>
+      </g>
+      <circle cx="36" cy="140" r="22" fill="#fff9c4" opacity="0.55" filter="url(#fanoosGlow)"/>
+    </g>
+
+    <!-- Grand Center Islamic Arch (Multi-lobed Scalloped Ogee Arch) -->
+    <!-- Outer Heavy Gold Moulding -->
+    <path d="M 90,440 L 90,200 C 90,95 168,36 256,6 C 344,36 422,95 422,200 L 422,440 Z" fill="none" stroke="url(#goldMetallic)" stroke-width="14" stroke-linejoin="round" filter="url(#softShadow)"/>
+    <path d="M 102,440 L 102,204 C 102,112 174,54 256,26 C 338,54 410,112 410,204 L 410,440 Z" fill="#08346e" stroke="url(#goldTrim)" stroke-width="4"/>
+
+    <!-- Inner Scalloped / Multifoil Lobe Frame with Radiant Backdrop -->
+    <path d="M 118,440 L 118,210 C 118,172 138,150 166,134 C 182,114 206,98 226,82 C 242,70 256,58 256,58 C 256,58 270,70 286,82 C 306,98 330,114 346,134 C 374,150 394,172 394,210 L 394,440 Z" fill="url(#alcoveLight)" stroke="url(#goldMetallic)" stroke-width="7"/>
+
+    <!-- Hanging Chains and Golden Stars (Upper Sky) -->
+    <!-- Far Left Star -->
+    <g transform="translate(42, 0)">
+      <line x1="0" y1="0" x2="0" y2="148" stroke="#ffca28" stroke-width="1.8"/>
+      <path d="M 0,148 L 3,155 L 10,156 L 5,161 L 6,168 L 0,164 L -6,168 L -5,161 L -10,156 L -3,155 Z" fill="#ffe082" filter="url(#fanoosGlow)"/>
+    </g>
+    <!-- Left Star beside Lantern -->
+    <g transform="translate(118, 0)">
+      <line x1="0" y1="0" x2="0" y2="88" stroke="#ffca28" stroke-width="1.8"/>
+      <path d="M 0,88 L 2.5,93 L 8,94 L 4,98 L 5,103 L 0,100 L -5,103 L -4,98 L -8,94 L -2.5,93 Z" fill="#ffe082" filter="url(#fanoosGlow)"/>
+    </g>
+    <!-- Right Star beside Lantern -->
+    <g transform="translate(394, 0)">
+      <line x1="0" y1="0" x2="0" y2="88" stroke="#ffca28" stroke-width="1.8"/>
+      <path d="M 0,88 L 2.5,93 L 8,94 L 4,98 L 5,103 L 0,100 L -5,103 L -4,98 L -8,94 L -2.5,93 Z" fill="#ffe082" filter="url(#fanoosGlow)"/>
+    </g>
+    <!-- Far Right Star -->
+    <g transform="translate(470, 0)">
+      <line x1="0" y1="0" x2="0" y2="148" stroke="#ffca28" stroke-width="1.8"/>
+      <path d="M 0,148 L 3,155 L 10,156 L 5,161 L 6,168 L 0,164 L -6,168 L -5,161 L -10,156 L -3,155 Z" fill="#ffe082" filter="url(#fanoosGlow)"/>
+    </g>
+
+    <!-- Hanging Traditional Ornate Lanterns (Fanoos) -->
+    <!-- Left Fanoos -->
+    <g transform="translate(82, 0)">
+      <line x1="0" y1="0" x2="0" y2="70" stroke="#ffca28" stroke-width="2.5"/>
+      <!-- Hanging ring -->
+      <circle cx="0" cy="70" r="4.5" fill="none" stroke="url(#goldMetallic)" stroke-width="2"/>
+      <!-- Dome Cap -->
+      <path d="M -16,84 C -14,75 0,72 0,72 C 0,72 14,75 16,84 Z" fill="url(#goldMetallic)" stroke="#e65100" stroke-width="1"/>
+      <ellipse cx="0" cy="84" rx="16" ry="3" fill="url(#goldMetallic)"/>
+      <!-- Glass Lantern Chamber -->
+      <polygon points="-16,84 16,84 11,122 -11,122" fill="#fff9c4" stroke="url(#goldMetallic)" stroke-width="1.5"/>
+      <!-- Golden Ribs -->
+      <line x1="-6" y1="84" x2="-4" y2="122" stroke="url(#goldMetallic)" stroke-width="1.5"/>
+      <line x1="6" y1="84" x2="4" y2="122" stroke="url(#goldMetallic)" stroke-width="1.5"/>
+      <!-- Radiant Interior Bulb -->
+      <circle cx="0" cy="102" r="10" fill="#ffffff" filter="url(#fanoosGlow)"/>
+      <!-- Base & Lower Spire -->
+      <path d="M -11,122 L 11,122 L 7,130 L -7,130 Z" fill="url(#goldMetallic)"/>
+      <polygon points="0,142 -6,130 6,130" fill="url(#goldMetallic)"/>
+      <circle cx="0" cy="144" r="2.5" fill="#ffd54f"/>
+    </g>
+
+    <!-- Right Fanoos -->
+    <g transform="translate(430, 0)">
+      <line x1="0" y1="0" x2="0" y2="70" stroke="#ffca28" stroke-width="2.5"/>
+      <circle cx="0" cy="70" r="4.5" fill="none" stroke="url(#goldMetallic)" stroke-width="2"/>
+      <path d="M -16,84 C -14,75 0,72 0,72 C 0,72 14,75 16,84 Z" fill="url(#goldMetallic)" stroke="#e65100" stroke-width="1"/>
+      <ellipse cx="0" cy="84" rx="16" ry="3" fill="url(#goldMetallic)"/>
+      <polygon points="-16,84 16,84 11,122 -11,122" fill="#fff9c4" stroke="url(#goldMetallic)" stroke-width="1.5"/>
+      <line x1="-6" y1="84" x2="-4" y2="122" stroke="url(#goldMetallic)" stroke-width="1.5"/>
+      <line x1="6" y1="84" x2="4" y2="122" stroke="url(#goldMetallic)" stroke-width="1.5"/>
+      <circle cx="0" cy="102" r="10" fill="#ffffff" filter="url(#fanoosGlow)"/>
+      <path d="M -11,122 L 11,122 L 7,130 L -7,130 Z" fill="url(#goldMetallic)"/>
+      <polygon points="0,142 -6,130 6,130" fill="url(#goldMetallic)"/>
+      <circle cx="0" cy="144" r="2.5" fill="#ffd54f"/>
+    </g>
+
+    <!-- AQC Official Emblem Plaque (Inside Upper Arch) -->
+    <g transform="translate(256, 172)">
+      <!-- Soft Lavender-Blue Framed Plaque -->
+      <rect x="-56" y="-64" width="112" height="122" rx="18" ry="18" fill="#ffffff" fill-opacity="0.9" stroke="#9fa8da" stroke-width="3" filter="url(#softShadow)"/>
+
+      <!-- Soaring Swallows (Ababeel Flock in Ascending Flight) -->
+      <g fill="#283593" opacity="0.92">
+        <!-- Lead swallow ascending highest -->
+        <path d="M 22,-48 C 28,-58 40,-54 38,-48 C 32,-44 28,-40 25,-42 C 24,-46 22,-48 22,-48 Z"/>
+        <path d="M 16,-46 C 22,-52 30,-46 26,-40 C 22,-42 18,-44 16,-46 Z"/>
+        <!-- Central soaring swallows -->
+        <path d="M -10,-36 C -4,-42 4,-38 0,-34 C -4,-33 -7,-32 -10,-36 Z"/>
+        <path d="M 6,-30 C 13,-36 20,-31 16,-26 C 12,-27 9,-26 6,-30 Z"/>
+        <path d="M -22,-26 C -16,-32 -9,-28 -13,-24 C -17,-23 -19,-23 -22,-26 Z"/>
+        <path d="M 14,-20 C 20,-26 27,-22 22,-18 C 18,-19 16,-18 14,-20 Z"/>
+        <path d="M -8,-18 C -3,-24 4,-20 0,-16 C -3,-17 -5,-16 -8,-18 Z"/>
+      </g>
+
+      <!-- The Holy Quran Open Book Symbol -->
+      <g transform="translate(0, -6)">
+        <!-- Left Open Page -->
+        <path d="M 0,-4 Q -25,-18 -48,-11 Q -45,12 -42,20 Q -24,8 0,16 Z" fill="#0d1b3e"/>
+        <path d="M -2,-2 Q -24,-15 -45,-9 Q -43,10 -40,17 Q -22,6 -2,13 Z" fill="#ffffff" opacity="0.3"/>
+        <path d="M -4,0 Q -23,-12 -42,-7 Q -40,8 -38,14 Q -21,5 -4,11 Z" fill="#0d1b3e"/>
+        <!-- Right Open Page -->
+        <path d="M 0,-4 Q 25,-18 48,-11 Q 45,12 42,20 Q 24,8 0,16 Z" fill="#0d1b3e"/>
+        <path d="M 2,-2 Q 24,-15 45,-9 Q 43,10 40,17 Q 22,6 2,13 Z" fill="#ffffff" opacity="0.3"/>
+        <path d="M 4,0 Q 23,-12 42,-7 Q 40,8 38,14 Q 21,5 4,11 Z" fill="#0d1b3e"/>
+        <!-- Golden Center Spine / Bookmark Ribbon -->
+        <polygon points="-3,-4 3,-4 2,22 -2,22" fill="url(#goldMetallic)"/>
+      </g>
+
+      <!-- A Q C Typography Centered -->
+      <text x="0" y="44" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="24" font-weight="900" fill="#0d2352" text-anchor="middle" letter-spacing="4">A Q C</text>
+    </g>
+
+    <!-- Floor / Stage Platform System -->
+    <!-- Floor Surface -->
+    <path d="M 0,396 L 512,396 L 512,512 L 0,512 Z" fill="#021430"/>
+    <ellipse cx="256" cy="400" rx="256" ry="32" fill="#062654"/>
+    <ellipse cx="256" cy="400" rx="220" ry="24" fill="url(#stageSpotlight)"/>
+
+    <!-- Stepped Circular Podium Stage Base -->
+    <!-- Lower Stage Step (Tier 1) -->
+    <ellipse cx="256" cy="466" rx="180" ry="28" fill="#051f44" stroke="url(#goldMetallic)" stroke-width="4.5"/>
+    <path d="M 76,466 C 76,482 156,494 256,494 C 356,494 436,482 436,466 L 436,476 C 436,492 356,504 256,504 C 156,504 76,492 76,476 Z" fill="#03122b" stroke="url(#goldTrim)" stroke-width="2"/>
+    
+    <!-- Golden LED Stage Rim Glow -->
+    <ellipse cx="256" cy="468" rx="176" ry="24" fill="none" stroke="#fff59d" stroke-width="2" opacity="0.6"/>
+
+    <!-- Upper Stage Step (Tier 2) -->
+    <ellipse cx="256" cy="444" rx="148" ry="22" fill="#093166" stroke="url(#goldMetallic)" stroke-width="5"/>
+    <path d="M 108,444 C 108,456 174,466 256,466 C 338,466 404,456 404,444 L 404,452 C 404,464 338,474 256,474 C 174,474 108,464 108,452 Z" fill="#051f44" stroke="url(#goldTrim)" stroke-width="2"/>
+    <ellipse cx="256" cy="446" rx="144" ry="18" fill="none" stroke="#fff9c4" stroke-width="2" opacity="0.75"/>
+
+    <!-- Grand Royal Blue Podium (Rostrum / Minbar) -->
+    <g transform="translate(256, 288)" filter="url(#softShadow)">
+      <!-- Main Podium Slanted Body -->
+      <path d="M -106,0 L 106,0 L 92,152 L -92,152 Z" fill="url(#podiumGrad)" stroke="url(#goldMetallic)" stroke-width="4.5"/>
+      <!-- Inner Inset Panel with Royal Blue Shadow -->
+      <path d="M -96,8 L 96,8 L 84,144 L -84,144 Z" fill="url(#podiumInner)" stroke="#0d47a1" stroke-width="2.5"/>
+
+      <!-- Magnificent Round Golden Medallion Centered on Podium -->
+      <!-- Outer Filigree Floral Radiance Halo -->
+      <circle cx="0" cy="78" r="56" fill="url(#goldMetallic)" filter="url(#fanoosGlow)" opacity="0.4"/>
+      
+      <!-- Ornate Baroque Scrolling Arabesque Border of Medallion -->
+      <g stroke="url(#goldTrim)" stroke-width="2.5" fill="url(#goldMetallic)">
+        <!-- 16 Acanthus / Arabesque Leaf Petals around circle -->
+        <circle cx="0" cy="24" r="5"/>
+        <circle cx="0" cy="132" r="5"/>
+        <circle cx="54" cy="78" r="5"/>
+        <circle cx="-54" cy="78" r="5"/>
+        <circle cx="38" cy="40" r="4.5"/>
+        <circle cx="-38" cy="40" r="4.5"/>
+        <circle cx="38" cy="116" r="4.5"/>
+        <circle cx="-38" cy="116" r="4.5"/>
+        <circle cx="21" cy="29" r="4"/>
+        <circle cx="-21" cy="29" r="4"/>
+        <circle cx="21" cy="127" r="4"/>
+        <circle cx="-21" cy="127" r="4"/>
+        <circle cx="50" cy="58" r="4"/>
+        <circle cx="-50" cy="58" r="4"/>
+        <circle cx="50" cy="98" r="4"/>
+        <circle cx="-50" cy="98" r="4"/>
+      </g>
+
+      <!-- Outer Gold Bevel Ring -->
+      <circle cx="0" cy="78" r="48" fill="#d4a017" stroke="#fffde7" stroke-width="2.5"/>
+      <!-- Inner Cream-Gold Calligraphy Disc -->
+      <circle cx="0" cy="78" r="42" fill="#fffde7" stroke="url(#goldMetallic)" stroke-width="2.5"/>
+      <circle cx="0" cy="78" r="38" fill="#fff9c4" stroke="#c49000" stroke-width="1.2"/>
+
+      <!-- Authentic Arabic Calligraphy "القرآن الكريم" in Classic Thuluth -->
+      <g transform="translate(0, 78)" fill="#784700" stroke="#5d3500" stroke-width="0.4">
+        <!-- Calligraphic Ascenders & Interlocking Ligatures -->
+        <!-- Center Alef / Lam ascenders -->
+        <path d="M -15,-27 L -11,-27 L -11,8 C -11,18 -18,22 -26,19 C -22,17 -20,13 -20,7 L -20,-27 L -17,-27 Z"/>
+        <path d="M -5,-27 L -2,-27 L -2,12 L -5,12 Z"/>
+        <path d="M 3,-27 L 6,-27 L 6,12 L 3,12 Z"/>
+        <path d="M 12,-27 L 15,-27 L 15,6 C 15,16 23,21 30,18 C 26,16 24,12 24,6 L 24,-27 L 27,-27 Z"/>
+        <!-- Qaf and Ra curvature -->
+        <path d="M -16,-3 C -20,-11 -7,-13 0,-8 C 4,-6 5,0 0,2 C -6,4 -11,3 -16,-3 Z"/>
+        <circle cx="-11" cy="-15" r="2"/>
+        <circle cx="-5" cy="-16" r="2"/>
+        <!-- Ya and Meem calligraphic swash -->
+        <path d="M -24,-2 C -16,-5 -12,5 -4,5 C 2,5 12,-3 22,2 C 16,5 10,7 2,7 C -8,7 -16,2 -24,-2 Z"/>
+        <path d="M -18,12 C -8,16 8,16 18,12 C 10,14 -2,14 -18,12 Z" stroke-width="1.6"/>
+      </g>
+    </g>
+
+    <!-- Podium Top Table Lip & Gold Moulding -->
+    <path d="M 140,284 L 372,284 L 358,298 L 154,298 Z" fill="url(#goldMetallic)" stroke="#b26a00" stroke-width="1.8" filter="url(#softShadow)"/>
+
+    <!-- Lush Floral Garland Arrangement Across Podium Top -->
+    <g transform="translate(256, 282)">
+      <!-- Deep Emerald Leaves Foundation -->
+      <g fill="#1b5e20" opacity="0.95">
+        <path d="M -122,2 C -134,-12 -116,-26 -98,-14 Z"/>
+        <path d="M 122,2 C 134,-12 116,-26 98,-14 Z"/>
+        <path d="M -90,-18 C -98,-32 -80,-34 -72,-20 Z"/>
+        <path d="M 90,-18 C 98,-32 80,-34 72,-20 Z"/>
+        <path d="M -48,-26 C -54,-38 -36,-40 -30,-28 Z"/>
+        <path d="M 48,-26 C 54,-38 36,-40 30,-28 Z"/>
+        <path d="M 0,-32 C -9,-44 9,-44 0,-25 Z"/>
+      </g>
+
+      <!-- Multi-layered Sapphire and Sky-Blue Roses -->
+      <!-- Left Outer Blue Rose -->
+      <circle cx="-96" cy="-6" r="14" fill="#1565c0" stroke="#0d47a1" stroke-width="1.5"/>
+      <circle cx="-96" cy="-7" r="9" fill="#1e88e5"/>
+      <circle cx="-95" cy="-7" r="4.5" fill="#64b5f6"/>
+
+      <!-- Left Mid Blue Rose -->
+      <circle cx="-60" cy="-14" r="17" fill="#1976d2" stroke="#0d47a1" stroke-width="1.5"/>
+      <circle cx="-60" cy="-15" r="11" fill="#2196f3"/>
+      <circle cx="-59" cy="-15" r="5.5" fill="#90caf9"/>
+
+      <!-- Center Blue Rose -->
+      <circle cx="0" cy="-12" r="18" fill="#0d47a1" stroke="#0a2a66" stroke-width="1.5"/>
+      <circle cx="0" cy="-13" r="12" fill="#1565c0"/>
+      <circle cx="1" cy="-13" r="6" fill="#42a5f5"/>
+
+      <!-- Right Mid Blue Rose -->
+      <circle cx="60" cy="-14" r="17" fill="#1976d2" stroke="#0d47a1" stroke-width="1.5"/>
+      <circle cx="60" cy="-15" r="11" fill="#2196f3"/>
+      <circle cx="59" cy="-15" r="5.5" fill="#90caf9"/>
+
+      <!-- Right Outer Blue Rose -->
+      <circle cx="96" cy="-6" r="14" fill="#1565c0" stroke="#0d47a1" stroke-width="1.5"/>
+      <circle cx="96" cy="-7" r="9" fill="#1e88e5"/>
+      <circle cx="95" cy="-7" r="4.5" fill="#64b5f6"/>
+
+      <!-- Interspersed White and Cream Peonies/Roses -->
+      <circle cx="-78" cy="-8" r="15" fill="#f5f5f5" stroke="#cfd8dc" stroke-width="1.5"/>
+      <circle cx="-78" cy="-9" r="9" fill="#ffffff"/>
+      <circle cx="-77" cy="-9" r="4.5" fill="#fffde7"/>
+
+      <circle cx="-30" cy="-16" r="16" fill="#fafafa" stroke="#cfd8dc" stroke-width="1.5"/>
+      <circle cx="-30" cy="-17" r="10" fill="#ffffff"/>
+      <circle cx="-29" cy="-17" r="5" fill="#fff9c4"/>
+
+      <circle cx="30" cy="-16" r="16" fill="#fafafa" stroke="#cfd8dc" stroke-width="1.5"/>
+      <circle cx="30" cy="-17" r="10" fill="#ffffff"/>
+      <circle cx="29" cy="-17" r="5" fill="#fff9c4"/>
+
+      <circle cx="78" cy="-8" r="15" fill="#f5f5f5" stroke="#cfd8dc" stroke-width="1.5"/>
+      <circle cx="78" cy="-9" r="9" fill="#ffffff"/>
+      <circle cx="77" cy="-9" r="4.5" fill="#fffde7"/>
+
+      <!-- Delicate Baby's Breath White Florets -->
+      <g fill="#ffffff" opacity="0.95">
+        <circle cx="-110" cy="-10" r="3"/>
+        <circle cx="-102" cy="-18" r="2.8"/>
+        <circle cx="-45" cy="-24" r="2.8"/>
+        <circle cx="-15" cy="-26" r="3"/>
+        <circle cx="15" cy="-26" r="3"/>
+        <circle cx="45" cy="-24" r="2.8"/>
+        <circle cx="102" cy="-18" r="2.8"/>
+        <circle cx="110" cy="-10" r="3"/>
+      </g>
+
+      <!-- Stage Gooseneck Microphone -->
+      <path d="M 68,0 C 76,-16 70,-42 46,-50" fill="none" stroke="#212121" stroke-width="4" stroke-linecap="round"/>
+      <!-- Foam Windscreen Microphone Capsule -->
+      <ellipse cx="42" cy="-52" rx="7.5" ry="10" fill="#1c1c1c" stroke="#424242" stroke-width="1.2" transform="rotate(32 42 -52)"/>
+      <ellipse cx="41" cy="-53" rx="2.5" ry="5.5" fill="#616161" transform="rotate(32 42 -52)"/>
+    </g>
+
+    <!-- Stage Lighting Flares & Reflective Highlights on Floor -->
+    <ellipse cx="256" cy="496" rx="120" ry="14" fill="#fff9c4" opacity="0.25" filter="url(#fanoosGlow)"/>
+    <ellipse cx="115" cy="474" rx="42" ry="10" fill="#ffd54f" opacity="0.18" filter="url(#fanoosGlow)"/>
+    <ellipse cx="397" cy="474" rx="42" ry="10" fill="#ffd54f" opacity="0.18" filter="url(#fanoosGlow)"/>
+
+    <!-- Distinctive Outer Squircle App Icon Border with Royal Blue Neon Bevel -->
+    <rect x="3" y="3" width="506" height="506" rx="110" ry="110" fill="none" stroke="url(#squircleBorder)" stroke-width="6"/>
+  </g>
+</svg>

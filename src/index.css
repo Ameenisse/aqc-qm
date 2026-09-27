@@ -1,0 +1,1263 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Mv_Eamaan_XP', 'MVEamaan', 'MV Eamaan XP', 'Faruma', sans-serif;
+  --font-dhivehi: 'Mv_Eamaan_XP', 'MVEamaan', 'MV Eamaan XP', 'Faruma', sans-serif;
+  --font-thaana: 'Mv_Eamaan_XP', 'MVEamaan', 'MV Eamaan XP', 'Faruma', sans-serif;
+  --font-quran: 'Amiri Quran', 'Amiri', 'Scheherazade New', serif;
+}
+
+@font-face {
+  font-family: 'Mv_Eamaan_XP';
+  src: url('/fonts/Mv_Eamaan_XP.otf') format('opentype'),
+       url('https://dhivehi.mv/fonts/data/df/Mv_Eamaan_XP.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MVEamaan';
+  src: url('/fonts/Mv_Eamaan_XP.otf') format('opentype'),
+       url('https://dhivehi.mv/fonts/data/df/Mv_Eamaan_XP.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MV Eamaan XP';
+  src: url('/fonts/Mv_Eamaan_XP.otf') format('opentype'),
+       url('https://dhivehi.mv/fonts/data/df/Mv_Eamaan_XP.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --emerald: #047857;
+  --emerald2: #065f46;
+  --gold: #d4a017;
+  --bg: #f8fafc;
+  --card: #fff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --red: #dc2626;
+  --orange: #ea580c;
+  --blue: #2563eb;
+  --purple: #7c3aed;
+  --green: #16a34a;
+  --amber: #d97706;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --font-thaana: 'Mv_Eamaan_XP', 'MVEamaan', 'MV Eamaan XP', 'MV Boli', 'Faruma', 'A_Faruma', Arial, sans-serif;
+  --font-dhivehi: 'Mv_Eamaan_XP', 'MVEamaan', 'MV Eamaan XP', 'MV Boli', 'Faruma', 'A_Faruma', Arial, sans-serif;
+  --font-quran: 'Amiri Quran', 'Amiri', serif;
+  font-family: var(--font-thaana);
+}
+
+html, body, #root {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-thaana);
+  direction: rtl;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body * {
+  font-family: var(--font-thaana);
+}
+
+button, input, select, textarea, optgroup, p, span, div, h1, h2, h3, h4, h5, h6, a, table, th, td, label {
+  font-family: var(--font-thaana);
+}
+
+button, input, select, textarea {
+  font: inherit;
+  font-family: var(--font-thaana);
+}
+
+button {
+  cursor: pointer;
+}
+
+.ltr { direction: ltr; }
+.rtl { direction: rtl; }
+
+.dhivehi,
+.thaana,
+.font-dhivehi,
+.font-thaana,
+[lang="dv"] {
+  font-family: var(--font-thaana) !important;
+}
+
+.arabic, .arabic *,
+.quran-text, .quran-text *,
+.mushaf-text, .mushaf-text *,
+.font-quran, .font-quran *,
+[lang="ar"], [lang="ar"] *,
+.quran-surah-section, .quran-surah-section *,
+.quran-bismillah-line, .quran-bismillah-line *,
+.quran-surah-title, .quran-surah-title *,
+.quran-ayah-marker,
+.audience-quran-text, .audience-quran-text *,
+#podiumQuran, #podiumQuran * {
+  font-family: var(--font-quran) !important;
+  direction: rtl !important;
+  unicode-bidi: isolate;
+  line-height: 2.2;
+  font-weight: 400;
+  letter-spacing: 0;
+  word-spacing: 3px;
+  font-feature-settings: "cv01" on, "cv02" on, "kern" on, "liga" on, "mkmk" on, "mark" on;
+  font-variant-ligatures: common-ligatures contextual;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Reference button styles */
+.btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 16px;
+  background: #e2e8f0;
+  color: #0f172a;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn:hover {
+  filter: brightness(0.97);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn.primary {
+  background: var(--emerald);
+  color: #ffffff;
+}
+.btn.primary:hover {
+  background: var(--emerald2);
+}
+.btn.gold {
+  background: var(--gold);
+  color: #111827;
+}
+.btn.danger {
+  background: var(--red);
+  color: #ffffff;
+}
+.btn.warn {
+  background: var(--amber);
+  color: #ffffff;
+}
+.btn.ghost {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  color: #334155;
+}
+.btn.ghost:hover {
+  background: #f8fafc;
+}
+.btn.small {
+  padding: 7px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+/* Reference badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #e2e8f0;
+  color: #334155;
+  line-height: 1;
+}
+.badge.green {
+  background: #dcfce7;
+  color: #166534;
+}
+.badge.red {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.badge.amber {
+  background: #fef3c7;
+  color: #92400e;
+}
+.badge.blue {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.badge.purple {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+/* Reference cards and layout */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.card h2, .card h3 {
+  margin-top: 0;
+}
+.kpi {
+  font-size: 30px;
+  font-weight: 900;
+}
+.muted {
+  color: var(--muted);
+}
+.spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Form fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 700;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #ffffff;
+  outline: none;
+  font-size: 14px;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+/* Question numbers grid */
+.questionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: 10px;
+}
+.qnum {
+  height: 64px;
+  border: 2px solid #a7f3d0;
+  background: #ffffff;
+  border-radius: 14px;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--emerald);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.qnum:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(4, 120, 87, 0.15);
+}
+.qnum.used {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #b91c1c;
+  opacity: 0.85;
+}
+.qnum.current {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+.qnum:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Stage Hero header */
+.stageHero {
+  display: grid;
+  grid-template-columns: 92px 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+.avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 20px;
+  background: #e2e8f0;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  font-weight: 900;
+  color: #64748b;
+  border: 2px solid #cbd5e1;
+}
+.stageName {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+.stageNo {
+  font-size: 44px;
+  font-weight: 900;
+  color: var(--emerald);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.timer {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 42px;
+  font-weight: 900;
+  direction: ltr;
+}
+.judgeState {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid #eef2f7;
+}
+
+/* Modal and toast */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.48);
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.modal {
+  background: white;
+  border-radius: 20px;
+  width: min(760px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--line);
+  direction: rtl;
+}
+.modal h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 900;
+}
+.toast {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  z-index: 150;
+  box-shadow: var(--shadow);
+  font-weight: 700;
+  font-size: 14px;
+  direction: rtl;
+}
+.toast.error {
+  background: #991b1b;
+}
+.toast.success {
+  background: #166534;
+}
+
+/* Notice alerts */
+.notice {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  border: 1px solid #bfdbfe;
+  font-size: 14px;
+}
+.notice.warn {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+.notice.danger {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+/* Operator filter grid */
+.operator-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.operator-filter-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (max-width: 760px) {
+  .operator-filter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------- QURAN SURAH SECTIONS & BISMILLAH ---------------- */
+.quran-surah-section {
+  display: block;
+  width: 100%;
+  clear: both;
+  direction: rtl !important;
+  unicode-bidi: isolate;
+  text-align: center;
+  font-family: var(--font-quran) !important;
+  margin: 0;
+  padding: 0;
+  line-height: 2.2;
+}
+.quran-bismillah-line {
+  display: block;
+  width: 100%;
+  clear: both;
+  direction: rtl !important;
+  unicode-bidi: isolate;
+  text-align: center;
+  font-family: var(--font-quran) !important;
+  font-weight: 400;
+  color: #065f46;
+  line-height: 2.1;
+  margin: 8px auto 14px;
+  padding: 0;
+}
+.quran-bismillah-line + .quran-surah-section {
+  display: block;
+  clear: both;
+  width: 100%;
+  margin-top: 8px;
+}
+.quran-surah-title {
+  display: inline-block;
+  margin: 10px auto 14px;
+  padding: 5px 22px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  border: 1.5px solid #059669;
+  color: #064e3b;
+  font-family: var(--font-quran) !important;
+  font-size: 0.78em;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  direction: rtl !important;
+  unicode-bidi: isolate;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.12);
+}
+.quran-ayah-marker {
+  display: inline-block;
+  color: #047857;
+  font-family: var(--font-quran) !important;
+  font-size: 0.92em;
+  padding: 0 4px;
+  margin: 0 2px;
+  font-weight: 400;
+  user-select: none;
+  direction: rtl !important;
+  unicode-bidi: isolate;
+}
+.quran-surah-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  clear: both;
+  margin: 20px auto 14px;
+}
+.quran-surah-divider span {
+  position: relative;
+  display: block;
+  width: min(520px, 60%);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #047857 18%, #047857 82%, transparent);
+}
+.quran-surah-divider span::after {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 10px;
+  background: #ffffff;
+  color: #047857;
+  font-size: 13px;
+  line-height: 22px;
+  text-align: center;
+}
+
+/* ---------------- AUDIENCE BROADCAST VIEW ---------------- */
+body.audience-mode {
+  overflow: hidden;
+  height: 100vh;
+}
+body.audience-mode #root {
+  height: 100vh;
+  overflow: hidden;
+}
+.audience-screen {
+  min-height: 100vh;
+  width: 100%;
+  background: #ffffff;
+  color: #071f19;
+  overflow: hidden;
+  position: relative;
+  direction: rtl;
+}
+.audience-screen.has-custom-bg .audience-brand-title {
+  color: #ffffff;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+}
+.audience-screen.has-custom-bg .audience-brand-org {
+  color: #a7f3d0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+.audience-screen.has-custom-bg .audience-header {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+}
+.audience-screen.has-custom-bg .audience-holding-title {
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+.audience-screen.has-custom-bg .audience-holding-sub {
+  color: #f1f5f9;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Audience Screen Overlay Slider */
+input[type="range"].overlay-range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  border-radius: 9999px;
+  outline: none;
+}
+input[type="range"].overlay-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #20be8b;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+  border: 2px solid #ffffff;
+}
+input[type="range"].overlay-range-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #20be8b;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+  border: 2px solid #ffffff;
+}
+.audience-frame {
+  width: 100%;
+  height: 100vh;
+  padding: 18px 34px 22px;
+  display: flex;
+  flex-direction: column;
+}
+.audience-header {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 2px solid #123c31;
+  padding: 0 0 10px;
+  direction: rtl;
+}
+.audience-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  direction: rtl;
+}
+.audience-brand-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  object-fit: contain;
+  background: #047857;
+  box-shadow: 0 4px 14px rgba(4, 120, 87, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.audience-brand-text {
+  text-align: right;
+  direction: rtl;
+}
+.audience-brand-title {
+  font-family: var(--font-thaana), Arial, sans-serif;
+  font-size: clamp(17px, 1.6vw, 27px);
+  font-weight: 800;
+  color: #050505;
+  line-height: 1.25;
+}
+.audience-brand-org {
+  font-size: clamp(11px, 0.95vw, 15px);
+  font-weight: 700;
+  color: #047857;
+  margin-top: 3px;
+}
+.audience-display-controls {
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px;
+  background: #f8fafc;
+  border: 1.5px solid #0f172a;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  transition: opacity 0.25s ease;
+}
+.audience-controls-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.audience-control-button {
+  height: 34px;
+  min-width: 38px;
+  border: 1px solid #94a3b8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0f172a;
+  font-family: var(--font-thaana), sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 0 10px;
+}
+.audience-control-button.active {
+  background: #047857;
+  color: #ffffff;
+  border-color: #047857;
+}
+.audience-control-fullscreen {
+  width: 38px;
+  padding: 0;
+}
+
+/* Single-row performer bar when question show (small size, participants right, question left) */
+.audience-performer-bar {
+  min-height: 46px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  border: 1.5px solid #10b981;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+  direction: rtl;
+  flex-shrink: 0;
+}
+.audience-bar-participant {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  direction: rtl;
+}
+.audience-bar-name {
+  font-size: clamp(14px, 1.25vw, 19px);
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.audience-bar-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 800;
+  line-height: 1.2;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.audience-bar-pill.pill-num {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.audience-bar-pill.pill-grade {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+}
+.audience-bar-meta {
+  font-size: clamp(11px, 0.9vw, 13px);
+  color: #475569;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.audience-bar-question {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  direction: rtl;
+  flex-shrink: 0;
+}
+.audience-bar-pill.pill-question {
+  background: #047857;
+  color: #ffffff;
+  padding: 4px 10px;
+  font-size: clamp(11px, 0.95vw, 14px);
+  font-weight: 800;
+}
+.audience-bar-qinfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  direction: rtl;
+}
+.audience-bar-surah {
+  font-family: var(--font-quran);
+  font-size: clamp(15px, 1.3vw, 21px);
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.audience-bar-range {
+  font-size: clamp(11px, 0.85vw, 13px);
+  font-weight: 700;
+  color: #475569;
+  direction: rtl;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 3px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.audience-bar-timer {
+  direction: ltr;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(15px, 1.25vw, 21px);
+  font-weight: 900;
+  color: #064e3b;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 2px 8px;
+  border-radius: 8px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.audience-performer-card {
+  min-height: 90px;
+  margin-top: 14px;
+  border: 2px solid #10b981;
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 12px 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+.audience-performer-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.audience-question-pill {
+  flex: 0 0 auto;
+  min-width: 96px;
+  background: #047857;
+  color: #ffffff;
+  border-radius: 13px;
+  padding: 8px 14px;
+  text-align: center;
+  font-size: clamp(14px, 1.35vw, 21px);
+  font-weight: 900;
+}
+.audience-status-pill {
+  flex: 0 0 auto;
+  padding: 7px 12px;
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+  border-radius: 13px;
+  font-size: clamp(13px, 1.1vw, 17px);
+  font-weight: 800;
+}
+.audience-performer-text {
+  min-width: 0;
+}
+.audience-performer-name {
+  font-size: clamp(19px, 2vw, 31px);
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.audience-performer-details {
+  margin-top: 3px;
+  font-size: clamp(12px, 1.1vw, 17px);
+  font-weight: 600;
+  color: #334155;
+}
+.audience-question-summary {
+  text-align: left;
+  direction: rtl;
+}
+.audience-question-summary-surah {
+  font-family: var(--font-quran);
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: 1.25;
+}
+.audience-question-summary-range {
+  margin-top: 2px;
+  font-size: clamp(13px, 1.15vw, 18px);
+  font-weight: 700;
+  direction: rtl;
+  color: #64748b;
+}
+.audience-timer {
+  min-width: 105px;
+  direction: ltr;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(24px, 2.5vw, 40px);
+  font-weight: 900;
+  color: #064e3b;
+}
+
+.audience-quran-panel {
+  margin-top: 8px;
+  flex: 1;
+  min-height: 0;
+  border: 2px solid #10b981;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.audience-quran-heading {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 24px;
+  border-bottom: 1.5px solid #123c31;
+}
+.audience-quran-heading-surah {
+  font-family: var(--font-quran);
+  font-size: clamp(20px, 2vw, 32px);
+  line-height: 1.2;
+}
+.audience-quran-heading-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.audience-api-pill {
+  direction: ltr;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #86efac;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-family: var(--font-thaana), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+.audience-range-pill {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: #f8fafc;
+  font-size: clamp(11px, 0.9vw, 14px);
+  font-weight: 800;
+}
+.audience-quran-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(8px, 1.8vh, 22px) clamp(16px, 2.5vw, 44px);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.audience-bismillah {
+  font-family: var(--font-quran);
+  color: #164e3e;
+  font-size: clamp(28px, 3.2vw, 48px);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.audience-quran-text {
+  font-family: var(--font-quran) !important;
+  direction: rtl !important;
+  unicode-bidi: isolate;
+  font-size: clamp(24px, 3.2vw, 56px);
+  line-height: 2.1;
+  color: #020617;
+  text-align: center;
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
+  letter-spacing: 0;
+  overflow: hidden;
+  max-height: 100%;
+}
+.audience-holding {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.audience-holding-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
+}
+.audience-holding-logo {
+  width: min(220px, 26vw);
+  max-height: 190px;
+  object-fit: contain;
+  margin: 0 auto 18px;
+  display: block;
+}
+.audience-holding-title {
+  font-size: clamp(38px, 5.4vw, 78px);
+  font-weight: 900;
+}
+.audience-holding-org {
+  margin-top: 10px;
+  font-size: clamp(22px, 2.7vw, 40px);
+  color: #047857;
+}
+.audience-finished {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.audience-finished-text {
+  font-size: clamp(52px, 7.5vw, 115px);
+  font-weight: 1000;
+  color: #047857;
+}
+.audience-question-grid-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+  min-height: 0;
+  overflow: hidden;
+}
+.audience-question-grid-title {
+  text-align: center;
+  font-size: clamp(26px, 3.1vw, 46px);
+  font-weight: 900;
+  margin-bottom: 18px;
+}
+
+/* 4:9 Portrait ratio override */
+.audience-screen.ratio-portrait .audience-frame {
+  padding: 18px;
+}
+.audience-screen.ratio-portrait .audience-header {
+  min-height: 80px;
+}
+.audience-screen.ratio-portrait .audience-performer-card {
+  grid-template-columns: 1fr;
+}
+.audience-screen.ratio-portrait .audience-question-summary {
+  text-align: right;
+}
+.audience-screen.ratio-portrait .audience-quran-heading {
+  flex-direction: column;
+  align-items: stretch;
+}
+.audience-screen.ratio-portrait .audience-quran-heading-meta {
+  justify-content: center;
+}
+
+/* Compact audience mode */
+.audience-screen.audience-compact .audience-frame { padding: 10px 20px 12px; }
+.audience-screen.audience-compact .audience-header { min-height: 64px; padding-bottom: 8px; }
+.audience-screen.audience-compact .audience-brand-logo { width: 46px; height: 46px; }
+.audience-screen.audience-compact .audience-performer-card { min-height: 74px; margin-top: 10px; padding: 8px 14px; gap: 12px; }
+.audience-screen.audience-compact .audience-performer-name { font-size: clamp(18px, 1.7vw, 28px); }
+.audience-screen.audience-compact .audience-performer-details { font-size: clamp(11px, 1vw, 15px); }
+.audience-screen.audience-compact .audience-question-summary-surah { font-size: clamp(18px, 1.7vw, 27px); }
+.audience-screen.audience-compact .audience-quran-panel { margin-top: 9px; border-radius: 18px; }
+.audience-screen.audience-compact .audience-quran-heading { min-height: 52px; padding: 6px 18px; }
+.audience-screen.audience-compact .audience-quran-heading-surah { font-size: clamp(19px, 1.9vw, 30px); }
+.audience-screen.audience-compact .audience-quran-scroll { padding: 8px 24px 10px; }
+.audience-screen.audience-compact .quran-surah-divider { margin: 12px auto 8px; }
+.audience-screen.audience-compact .quran-bismillah-line { margin: 4px auto 8px; line-height: 1.45; }
+.audience-screen.audience-compact .quran-bismillah-line + .quran-surah-section { margin-top: 4px; }
+
+/* ---------------- PODIUM VIEW ---------------- */
+.podium {
+  min-height: 100vh;
+  padding: 24px;
+  background: #ffffff;
+  color: var(--text);
+  direction: rtl;
+}
+.podium .questionGrid {
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+.podium .qnum {
+  height: 92px;
+  font-size: 32px;
+  font-weight: 900;
+}
+.zoomBar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+/* ---------------- JUDGE VIEW ---------------- */
+.scoreCard {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #ffffff;
+}
+.scoreInput {
+  width: 120px !important;
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 6px;
+}
+.deductChip {
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #be123c;
+  border-radius: 999px;
+  padding: 8px 14px;
+  min-height: 40px;
+  min-width: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  transition: all 0.1s ease;
+  touch-action: manipulation;
+}
+.deductChip:hover {
+  background: #ffe4e6;
+}
+.deductChip:active {
+  transform: scale(0.95);
+}
+.bellBtn {
+  min-width: 110px;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 14px;
+  touch-action: manipulation;
+}
+
+/* Tables */
+.tablewrap {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #ffffff;
+  -webkit-overflow-scrolling: touch;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+.table th, .table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eef2f7;
+  text-align: right;
+  vertical-align: middle;
+}
+.table th {
+  background: #f1f5f9;
+  font-weight: 800;
+  position: sticky;
+  top: 0;
+  color: #334155;
+  font-size: 13px;
+}
+.table tr:hover td {
+  background: #fafafa;
+}
+
+/* ---------------- COMPREHENSIVE RESPONSIVE ADAPTATIONS (MOBILE & TABLET) ---------------- */
+@media (max-width: 768px) {
+  .audience-performer-card {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .audience-question-summary {
+    text-align: right;
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  .stageHero {
+    grid-template-columns: 60px 1fr auto;
+    gap: 10px;
+  }
+  .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    font-size: 22px;
+  }
+  .stageName {
+    font-size: 19px;
+  }
+  .stageNo {
+    font-size: 26px;
+  }
+  .timer {
+    font-size: 28px;
+  }
+  .bellBtn {
+    min-width: 85px;
+    padding: 10px 8px;
+    font-size: 13px;
+    flex: 1 1 0;
+  }
+  .scoreInput {
+    width: 85px !important;
+    font-size: 18px;
+  }
+  .podium {
+    padding: 12px;
+  }
+  .podium .questionGrid {
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+    gap: 8px;
+  }
+  .podium .qnum {
+    height: 64px;
+    font-size: 22px;
+  }
+  .audience-frame {
+    padding: 12px 14px;
+  }
+  .audience-header {
+    min-height: 56px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .audience-brand-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+  .audience-performer-card {
+    padding: 10px 12px;
+    margin-top: 10px;
+  }
+  .audience-performer-main {
+    flex-wrap: wrap;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Ababil Quran Competition",
+  "description": "Production-grade Quran competition platform for Maldivian school, atoll, and national competitions with live judging, stage control, digital mushaf, podium display, and audience broadcast.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
