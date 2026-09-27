@@ -28,7 +28,8 @@ import {
   Scale,
   ChevronDown,
   Sparkles,
-  Filter
+  Filter,
+  RotateCcw
 } from 'lucide-react';
 import { ScoreAuditTab } from './ScoreAuditTab';
 
@@ -534,6 +535,22 @@ export const AdminPanel: React.FC = () => {
     }
   };
 
+  const handleResetQuestionUsed = async (q: Question) => {
+    if (!confirm(`Are you sure you want to reset Question #${q.question_number} and make it available in the pool again?`)) return;
+    try {
+      const res = await fetch('/api/stage/question-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question_id: q.id, question_number: q.question_number, user_id: user?.id || 'admin' })
+      });
+      if (res.ok) {
+        await loadData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleToggleJudgeBell = async (j: Judge) => {
     try {
       const res = await fetch(`/api/judges/${j.id}`, {
@@ -1022,15 +1039,28 @@ export const AdminPanel: React.FC = () => {
 
                       {/* Footer Actions */}
                       <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px]">
-                        <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                            q.used
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-emerald-100 text-emerald-800'
-                          }`}
-                        >
-                          {q.used ? 'Used on Stage' : 'Available'}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span
+                            className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                              q.used
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-emerald-100 text-emerald-800'
+                            }`}
+                          >
+                            {q.used ? 'Used on Stage' : 'Available'}
+                          </span>
+                          {q.used ? (
+                            <button
+                              type="button"
+                              onClick={() => handleResetQuestionUsed(q)}
+                              className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 transition-colors flex items-center gap-1 cursor-pointer"
+                              title="Reset question number to make it available again in the pool"
+                            >
+                              <RotateCcw size={10} />
+                              <span>ރީސެޓް</span>
+                            </button>
+                          ) : null}
+                        </div>
                         <div className="flex items-center gap-1">
                           <button
                             type="button"
@@ -1132,7 +1162,7 @@ export const AdminPanel: React.FC = () => {
       {activeTab === 'SETTINGS' && (
         <form
           onSubmit={handleSaveCompetitionSettings}
-          className="bg-white rounded-xl shadow-xs border border-slate-200 p-6 space-y-6"
+          className="bg-white rounded-xl shadow-xs border border-slate-200 p-4 sm:p-6 space-y-6"
         >
           <div className="border-b border-slate-100 pb-4">
             <h2 className="text-lg font-bold text-slate-900 font-dhivehi">
@@ -1145,30 +1175,36 @@ export const AdminPanel: React.FC = () => {
 
           {/* Logo & App Icon Section */}
           <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" dir="rtl">
               <div className="flex items-center gap-3">
                 <img
                   src={`/app-logo.png?v=${logoTimestamp}`}
                   alt="Official App Logo"
-                  className="w-16 h-16 rounded-xl object-contain bg-slate-900 p-1 border border-slate-300 shadow-xs"
+                  className="w-16 h-16 rounded-xl object-contain bg-slate-900 p-1 border border-slate-300 shadow-xs shrink-0"
                 />
-                <div>
-                  <h3 className="text-sm font-bold text-slate-800 font-dhivehi">
-                    އެޕް އަދި މުބާރާތުގެ ރަސްމީ ލޯގޯ / Official App Icon & Logo
+                <div className="text-right">
+                  <h3 className="text-sm font-bold text-slate-800">
+                    <span dir="ltr" className="font-sans font-bold">Official App Icon & Logo</span>
+                    <span className="mx-2 text-slate-400 font-sans">/</span>
+                    <span dir="rtl" className="font-dhivehi font-bold">އެޕް އައިކަން އަދި ލޯގޯ</span>
                   </h3>
-                  <p className="text-xs text-slate-500 font-sans">
+                  <p className="text-xs text-slate-600 font-sans mt-1" dir="ltr" style={{ textAlign: 'left' }}>
                     This logo is used across the PWA home screen icon, Top Navigation, Podium, and Audience displays.
                   </p>
-                  <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold text-emerald-700">
-                    <Check size={12} /> PWA & Web App Icon Active
-                  </span>
+                  <div className="mt-1" dir="ltr" style={{ textAlign: 'left' }}>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 font-sans">
+                      PWA & Web App Icon Active <Check size={13} className="text-emerald-600" />
+                    </span>
+                  </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <label className="inline-flex items-center gap-2 px-3 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg font-medium text-xs cursor-pointer shadow-xs transition">
+                <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-medium text-xs cursor-pointer shadow-xs transition select-none">
                   <Upload size={14} />
-                  <span>{logoUploading ? 'އަޕްލޯޑް ވަނީ...' : 'ލޯގޯ ބަދަލުކުރައްވާ / Upload Image'}</span>
+                  <span dir="ltr" className="font-sans font-bold">Upload / </span>
+                  <span dir="rtl" className="font-dhivehi font-bold">އަޕްލޯޑް</span>
+                  <span dir="ltr" className="font-sans font-bold"> Image</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -1385,8 +1421,36 @@ export const AdminPanel: React.FC = () => {
             </div>
           </div>
 
-          {/* Visibility switches */}
-          <div className="space-y-3 pt-2 border-t border-slate-100 text-xs">
+          {/* Performance Timer & Visibility switches */}
+          <div className="space-y-4 pt-3 border-t border-slate-200 text-xs">
+            {/* Start Performance Timer Toggle */}
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-slate-800 text-xs sm:text-sm font-dhivehi" dir="rtl">
+                    ސްޓޭޖް ޕާފޯމަންސް ޓައިމަރ / Start Performance Timer
+                  </span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    compForm.performance_timer_enabled !== false ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                  }`}>
+                    {compForm.performance_timer_enabled !== false ? 'ENABLED' : 'DISABLED'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 font-sans mt-0.5">
+                  Enable or disable the performance timer stopwatch on Operator stage control, Podium, and Audience displays when performance starts.
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer shrink-0 ml-3">
+                <input
+                  type="checkbox"
+                  checked={compForm.performance_timer_enabled !== false}
+                  onChange={(e) => setCompForm({ ...compForm, performance_timer_enabled: e.target.checked })}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-700"></div>
+              </label>
+            </div>
+
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -1486,14 +1550,14 @@ export const AdminPanel: React.FC = () => {
 
       {/* Add / Edit Participant Modal */}
       {showPartModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
           <form
             onSubmit={handleSaveParticipant}
-            className="bg-white rounded-2xl shadow-xl max-w-xl w-full p-6 space-y-4 border border-slate-200 overflow-y-auto max-h-[90vh]"
+            className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-4 sm:p-6 space-y-4 border border-slate-200 my-auto max-h-[min(90vh,calc(100dvh-2rem))] overflow-y-auto"
           >
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <h3 className="font-bold text-slate-900 text-base font-dhivehi">
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base font-dhivehi">
                   {editingPart
                     ? `ބައިވެރިޔާގެ މަޢުލޫމާތު ބަދަލުކުރުން (#${editingPart.participant_number})`
                     : 'އައު ބައިވެރިއަކު އިތުރުކުރުން'}
@@ -1505,14 +1569,14 @@ export const AdminPanel: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPartModal(false)}
-                className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center cursor-pointer"
+                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center cursor-pointer shrink-0 transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5 text-xs">
+              <div className="col-span-1">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ނަންބަރު (Participant Number):
                 </label>
@@ -1526,7 +1590,7 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-              <div>
+              <div className="col-span-1">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ޙާލަތު (Status):
                 </label>
@@ -1544,7 +1608,7 @@ export const AdminPanel: React.FC = () => {
                 </select>
               </div>
 
-              <div>
+              <div className="col-span-1">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ގުރޭޑް (Grade):
                 </label>
@@ -1564,7 +1628,7 @@ export const AdminPanel: React.FC = () => {
                 </select>
               </div>
 
-              <div>
+              <div className="col-span-1">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ގޮފި (Branch):
                 </label>
@@ -1587,7 +1651,7 @@ export const AdminPanel: React.FC = () => {
                 </select>
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-1 sm:col-span-2">
                 <label className="block font-semibold text-slate-700 mb-1 text-right">
                   ނަން (ދިވެހިބަހުން / Thaana):
                 </label>
@@ -1602,7 +1666,7 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-1 sm:col-span-2">
                 <label className="block font-semibold text-slate-700 mb-1">
                   Name (Latin / English):
                 </label>
@@ -1616,7 +1680,7 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-              <div>
+              <div className="col-span-1 sm:col-span-2">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ސްކޫލް / މުއައްސަސާ (Institution):
                 </label>
@@ -1629,7 +1693,7 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-              <div>
+              <div className="col-span-1">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ރަށް (Island):
                 </label>
@@ -1642,7 +1706,7 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-              <div>
+              <div className="col-span-1">
                 <label className="block font-semibold text-slate-700 mb-1">
                   އަތޮޅު (Atoll):
                 </label>
@@ -1655,7 +1719,7 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-              <div>
+              <div className="col-span-1">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ތަރުތީބު (Queue Order):
                 </label>
@@ -1667,7 +1731,7 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-1 sm:col-span-2">
                 <label className="block font-semibold text-slate-700 mb-1">
                   ނޯޓް (Notes / Remarks):
                 </label>
@@ -1681,17 +1745,17 @@ export const AdminPanel: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-3 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => setShowPartModal(false)}
-                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer text-center"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 rounded-lg text-xs font-bold bg-emerald-800 hover:bg-emerald-700 text-white shadow-xs cursor-pointer"
+                className="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-emerald-800 hover:bg-emerald-700 text-white shadow-xs cursor-pointer text-center"
               >
                 {editingPart ? 'Save Changes / ބަދަލުތައް ރައްކާކުރައްވާ' : 'Save Participant / އިތުރުކުރައްވާ'}
               </button>
@@ -1709,10 +1773,10 @@ export const AdminPanel: React.FC = () => {
 
       {/* Add / Edit Question Modal */}
       {showQuestModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
           <form
             onSubmit={handleSaveQuestion}
-            className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 space-y-4 border border-slate-200 my-8"
+            className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-4 sm:p-6 space-y-4 border border-slate-200 my-auto max-h-[min(90vh,calc(100dvh-2rem))] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
@@ -2045,18 +2109,18 @@ export const AdminPanel: React.FC = () => {
                 />
               </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-3 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => setShowQuestModal(false)}
-                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer text-center"
               >
                 Cancel / ކެންސަލް
               </button>
               <button
                 type="submit"
                 disabled={questSaving}
-                className="px-5 py-2 rounded-lg text-xs font-bold bg-emerald-800 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-colors disabled:opacity-50"
+                className="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg text-xs font-bold bg-emerald-800 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-colors disabled:opacity-50 text-center"
               >
                 {questSaving
                   ? 'Saving...'

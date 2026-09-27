@@ -13,7 +13,9 @@ import {
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { login } = useCompetition();
+  const { login, stageState } = useCompetition();
+  const comp = stageState?.competition;
+  const logoUrl = comp?.organization_logo_url || comp?.competition_logo_url || '/app-logo.png';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -69,17 +71,17 @@ export const LoginPage: React.FC = () => {
         <div className="text-center space-y-3">
           <div className="inline-block relative mb-1">
             <img
-              src="/app-logo.png"
+              src={`${logoUrl}?v=${comp?.updated_at || '1'}`}
               alt="Ababil Quran Competition Logo"
               className="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-contain shadow-2xl border-2 border-amber-400/40 ring-4 ring-emerald-500/20"
             />
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide font-dhivehi leading-snug">
-            އަބާބީލް ޤުރުއާން މުބާރާތް 1446
+            {comp?.name_dhivehi || 'އަބާބީލް ޤުރުއާން މުބާރާތް 1446'}
           </h1>
           <p className="text-xs sm:text-sm text-emerald-200/90 font-medium">
-            Ababil Quran Competition Management System
+            {comp?.name || 'Ababil Quran Competition Management System'}
           </p>
           <div className="flex items-center justify-center gap-2 text-xs text-emerald-400/80">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

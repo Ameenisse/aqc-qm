@@ -49,6 +49,8 @@ export const TopNav: React.FC<TopNavProps> = ({ currentSystem, setCurrentSystem,
   const isAdmin = user?.role === 'ADMIN';
   const isOperator = user?.role === 'PRESENTATION_OPERATOR';
   const isJudge = user?.role === 'JUDGE';
+  const comp = stageState?.competition;
+  const logoUrl = comp?.organization_logo_url || comp?.competition_logo_url || '/app-logo.png';
 
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs select-none">
@@ -61,18 +63,18 @@ export const TopNav: React.FC<TopNavProps> = ({ currentSystem, setCurrentSystem,
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 sm:gap-2.5">
               <img
-                src="/app-logo.png"
+                src={`${logoUrl}?v=${comp?.updated_at || '1'}`}
                 alt="Ababil Quran Competition Logo"
                 className="w-8 h-8 rounded-lg object-contain shadow-xs border border-blue-900/10 shrink-0"
               />
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-700 animate-pulse shrink-0" />
               <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
                 <span className="font-bold text-slate-800 tracking-wide text-xs sm:text-sm font-dhivehi leading-tight">
-                  އަބާބީލް ޤުރުއާން މުބާރާތް 1446
+                  {comp?.name_dhivehi || 'އަބާބީލް ޤުރުއާން މުބާރާތް 1446'}
                 </span>
                 <span className="text-slate-400 font-sans hidden sm:inline">|</span>
                 <span className="text-slate-500 font-sans text-[11px] sm:text-xs font-semibold leading-tight">
-                  Ababil Quran Competition
+                  {comp?.name || 'Ababil Quran Competition'}
                 </span>
               </div>
             </div>

@@ -52,6 +52,7 @@ export function initDatabase() {
       hifz_podium_answer_visibility INTEGER DEFAULT 0,
       finished_screen_duration INTEGER DEFAULT 3,
       finished_performance_text TEXT DEFAULT 'ނިމުނީ / Performance Finished',
+      performance_timer_enabled INTEGER DEFAULT 1,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
@@ -330,6 +331,9 @@ export function initDatabase() {
   } catch (e) {}
   try {
     db.prepare('ALTER TABLE competitions ADD COLUMN audience_background_overlay INTEGER DEFAULT 65').run();
+  } catch (e) {}
+  try {
+    db.prepare('ALTER TABLE competitions ADD COLUMN performance_timer_enabled INTEGER DEFAULT 1').run();
   } catch (e) {}
 
   seedInitialData();

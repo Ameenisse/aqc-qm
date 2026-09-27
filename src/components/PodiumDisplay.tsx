@@ -10,6 +10,7 @@ export const PodiumDisplay: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const comp = stageState?.competition;
+  const logoUrl = comp?.organization_logo_url || comp?.competition_logo_url || '/app-logo.png';
   const currentParticipant = stageState?.current_participant;
   const currentQuestion = stageState?.selected_question;
   const stageStatus = stageState?.stage_status || 'HOLDING';
@@ -32,7 +33,9 @@ export const PodiumDisplay: React.FC = () => {
     !isHifz && (comp?.tilawa_podium_quran_visibility ?? true);
 
   // Timer mode & calculation
-  const timerEnabled = (stageState?.timer_mode || 'stopwatch').toUpperCase() !== 'DISABLED';
+  const timerEnabled =
+    (stageState?.timer_mode || 'stopwatch').toUpperCase() !== 'DISABLED' &&
+    (comp?.performance_timer_enabled !== false);
   const [elapsedSec, setElapsedSec] = useState(0);
 
   React.useEffect(() => {
@@ -81,7 +84,7 @@ export const PodiumDisplay: React.FC = () => {
           <div className="card text-center py-16 max-w-xl mx-auto">
             <div className="stageHero justify-center mb-6" style={{ display: 'flex' }}>
               <img
-                src="/app-logo.png"
+                src={`${logoUrl}?v=${comp?.updated_at || '1'}`}
                 alt="Ababil Quran Competition Logo"
                 className="w-20 h-20 rounded-2xl object-contain shadow-md border-2 border-emerald-300 bg-white p-1"
               />

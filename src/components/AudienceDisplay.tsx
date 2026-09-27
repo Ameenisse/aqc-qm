@@ -28,7 +28,9 @@ export const AudienceDisplay: React.FC = () => {
   const isFinished = stageStatus === 'PERFORMANCE_FINISHED';
 
   // Timer mode & calculation
-  const timerEnabled = (stageState?.timer_mode || 'stopwatch').toUpperCase() !== 'DISABLED';
+  const timerEnabled =
+    (stageState?.timer_mode || 'stopwatch').toUpperCase() !== 'DISABLED' &&
+    (comp?.performance_timer_enabled !== false);
   const [elapsedSec, setElapsedSec] = useState(0);
 
   useEffect(() => {
@@ -219,7 +221,7 @@ export const AudienceDisplay: React.FC = () => {
           {/* Right Side in RTL: Branding */}
           <div className="audience-brand">
             {logoUrl ? (
-              <img className="audience-brand-logo" src={logoUrl} alt="Logo" />
+              <img className="audience-brand-logo" src={`${logoUrl}?v=${comp?.updated_at || '1'}`} alt="Logo" />
             ) : (
               <div className="audience-brand-logo">A</div>
             )}
@@ -296,7 +298,7 @@ export const AudienceDisplay: React.FC = () => {
             <div className="audience-holding">
               <div className="audience-holding-content">
                 {logoUrl ? (
-                  <img className="audience-holding-logo" src={logoUrl} alt="Logo" />
+                  <img className="audience-holding-logo" src={`${logoUrl}?v=${comp?.updated_at || '1'}`} alt="Logo" />
                 ) : (
                   <div
                     className="audience-brand-logo mx-auto mb-5"

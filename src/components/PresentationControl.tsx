@@ -9,6 +9,7 @@ export const PresentationControl: React.FC = () => {
     callParticipant,
     allowQuestionSelection,
     selectQuestion,
+    resetQuestion,
     setReady,
     startPerformance,
     pauseResumeTimer,
@@ -96,7 +97,9 @@ export const PresentationControl: React.FC = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const timerEnabled = (stageState?.timer_mode || 'stopwatch').toUpperCase() !== 'DISABLED';
+  const timerEnabled =
+    (stageState?.timer_mode || 'stopwatch').toUpperCase() !== 'DISABLED' &&
+    (stageState?.competition?.performance_timer_enabled !== false);
   const currentParticipant = stageState?.current_participant;
   const currentQuestion = stageState?.selected_question;
   const stageStatus = stageState?.stage_status || 'HOLDING';
@@ -257,6 +260,94 @@ export const PresentationControl: React.FC = () => {
     }
     const chosen = available[Math.floor(Math.random() * available.length)];
     handleSelectQuestion(chosen);
+  };
+
+  // Reset a specific previously picked question number
+  const handleResetQuestionPrompt = (qNum: string) => {
+    setConfirmModal({
+      isOpen: true,
+      title: `ސުވާލު ނަންބަރު ރީސެޓްކުރުން (#${qNum})`,
+      body: (
+        <div className="text-center py-4">
+          <div style={{ fontSize: 48, fontWeight: 900, color: 'var(--amber)' }}>{qNum}</div>
+          <p className="text-slate-800 font-bold mt-2 text-base font-dhivehi" dir="rtl">
+            ކުރިން ހޮވިފައިވާ މި ސުވާލު ނަންބަރު ({qNum}) އަލުން ބޭނުންކުރެވޭ ގޮތަށް ރީސެޓްކުރައްވަނީތޯ؟
+          </p>
+          <p className="text-xs text-slate-500 font-sans mt-2">
+            This will mark Question #{qNum} as available again in the question pool so it can be picked.
+          </p>
+        </div>
+      ),
+      okText: 'ރީސެޓް ކުރޭ',
+      isDanger: false,
+      onConfirm: async () => {
+        const res = await resetQuestion(qNum);
+        if (res.success) {
+          showToast(`ސުވާލު ${qNum} އަލުން ބޭނުންކުރެވޭ ގޮތަށް ރީސެޓްކޮށްފި`);
+        } else {
+          showToast(res.error || 'Failed to reset question', 'error');
+        }
+      }
+    });
+  };
+
+  // Reset the currently selected active question
+  const handleResetCurrentQuestion = () => {
+    if (!currentQuestion) return;
+    const qNum = currentQuestion.question_number;
+    setConfirmModal({
+      isOpen: true,
+      title: 'ހޮވިފައިވާ ސުވާލު ރީސެޓްކުރުން',
+      body: (
+        <div className="text-center py-4">
+          <div style={{ fontSize: 48, fontWeight: 900, color: 'var(--amber)' }}>{qNum}</div>
+          <p className="text-slate-800 font-bold mt-2 text-base font-dhivehi" dir="rtl">
+            މިހާރު ހޮވިފައިވާ ސުވާލު ނަންބަރު ({qNum}) ރީސެޓްކޮށް، އަލުން ސުވާލު ހޮވުމުގެ ފުރުސަތު ހުޅުވާލަން ޔަޤީންކުރައްވާތޯ؟
+          </p>
+          <p className="text-xs text-slate-500 font-sans mt-2">
+            This will un-select the question from the stage, return it to the available pool, and re-enable question number selection.
+          </p>
+        </div>
+      ),
+      okText: 'ސުވާލު ރީސެޓް ކުރޭ',
+      isDanger: true,
+      onConfirm: async () => {
+        const res = await resetQuestion(qNum);
+        if (res.success) {
+          showToast(`ހޮވިފައިވާ ސުވާލު (${qNum}) ރީސެޓްކޮށް، ސުވާލު ހޮވުމުގެ ފުރުސަތު އަލުން ހުޅުވާލައިފި`);
+        } else {
+          showToast(res.error || 'Failed to reset question', 'error');
+        }
+      }
+    });
+  };
+
+  // Reset all used questions in pool
+  const handleResetAllQuestionsPrompt = () => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'ހުރިހާ ސުވާލު ނަންބަރެއް ރީސެޓްކުރުން',
+      body: (
+        <div className="text-center py-4">
+          <p className="text-slate-800 font-bold text-base font-dhivehi" dir="rtl">
+            މި ގިންތީގެ ބޭނުންކުރެވިފައިވާ ހުރިހާ ސުވާލު ނަންބަރުތަކެއް ({stageState?.used_question_numbers?.length || 0} ސުވާލު) އަލުން ބޭނުންކުރެވޭ ގޮތަށް ރީސެޓްކުރަން ޔަޤީންކުރައްވާތޯ؟
+          </p>
+          <p className="text-xs text-slate-500 font-sans mt-2">
+            This will mark all questions in this category pool as available again.
+          </p>
+        </div>
+      ),
+      okText: 'ހުރިހާ ނަންބަރެއް ރީސެޓް ކުރޭ',
+      isDanger: true,
+      onConfirm: async () => {
+        const res = await resetQuestion(undefined, undefined, true);
+        if (res.success) {
+          showToast('ހުރިހާ ސުވާލު ނަންބަރެއް ރީސެޓްކުރެވިއްޖެ');
+        } else {
+          showToast(res.error || 'Failed to reset all questions', 'error');
+        }
+      }
+    });
   };
 
   // 4. Confirm Start Performance
@@ -446,7 +537,7 @@ export const PresentationControl: React.FC = () => {
 
         {/* Timer & Judge Statuses Card */}
         <div className="card">
-          {timerEnabled && (
+          {timerEnabled ? (
             <div className="mb-4 pb-3 border-b border-slate-100">
               <div className="spread">
                 <h3 className="font-black text-lg">ޓައިމަރ</h3>
@@ -470,6 +561,18 @@ export const PresentationControl: React.FC = () => {
                   Resume
                 </button>
               </div>
+            </div>
+          ) : (
+            <div className="mb-4 pb-3 border-b border-slate-100">
+              <div className="spread items-center">
+                <h3 className="font-black text-lg">ޓައިމަރ</h3>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                  DISABLED IN SETTINGS
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 font-sans mt-1">
+                Start performance timer is disabled in Competition Settings.
+              </p>
             </div>
           )}
 
@@ -495,13 +598,42 @@ export const PresentationControl: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
         {/* Question Grid */}
         <div className="card">
-          <div className="spread mb-3">
-            <h3 className="font-black text-lg">ސުވާލު ނަންބަރު</h3>
-            {currentQuestion && (
-              <span className="badge green">
-                Selected: {currentQuestion.question_number}
+          <div className="spread mb-3 items-center">
+            <div>
+              <h3 className="font-black text-lg">ސުވާލު ނަންބަރު</h3>
+              <span className="text-[11px] text-slate-500 font-sans block">
+                Click number to select; click used (↺) to reset
               </span>
-            )}
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap justify-end">
+              {currentQuestion && (
+                <button
+                  type="button"
+                  onClick={handleResetCurrentQuestion}
+                  disabled={stageStatus === 'PERFORMING'}
+                  className="btn small ghost text-amber-800 border-amber-300 hover:bg-amber-50 text-xs font-bold"
+                  title="Reset currently selected question so another can be chosen"
+                >
+                  ↺ ސުވާލު ރީސެޓް
+                </button>
+              )}
+              {stageState?.used_question_numbers && stageState.used_question_numbers.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleResetAllQuestionsPrompt}
+                  disabled={stageStatus === 'PERFORMING'}
+                  className="btn small ghost text-slate-600 hover:bg-slate-100 text-xs font-medium"
+                  title="Reset all used questions in pool"
+                >
+                  ↺ Reset All ({stageState.used_question_numbers.length})
+                </button>
+              )}
+              {currentQuestion && (
+                <span className="badge green text-xs">
+                  Selected: {currentQuestion.question_number}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="questionGrid">
@@ -513,10 +645,26 @@ export const PresentationControl: React.FC = () => {
                 <button
                   key={numStr}
                   className={`qnum ${isUsed ? 'used' : ''} ${isCurrent ? 'current' : ''}`}
-                  disabled={isUsed || stageStatus === 'PERFORMING'}
-                  onClick={() => handleSelectQuestion(numStr)}
+                  disabled={stageStatus === 'PERFORMING'}
+                  onClick={() => {
+                    if (isUsed) {
+                      handleResetQuestionPrompt(numStr);
+                    } else {
+                      handleSelectQuestion(numStr);
+                    }
+                  }}
+                  title={
+                    isUsed
+                      ? `ސުވާލު #${numStr} ވަނީ ބޭނުންކޮށްފައި. ކްލިކްކޮށްގެން ރީސެޓްކުރައްވާ (Click to reset)`
+                      : `ހޮއްވަވާ ސުވާލު #${numStr}`
+                  }
                 >
-                  {numStr}
+                  <span>{numStr}</span>
+                  {isUsed && (
+                    <span className="block text-[9px] text-amber-700 font-sans mt-0.5 leading-none font-bold">
+                      USED ↺
+                    </span>
+                  )}
                 </button>
               );
             })}

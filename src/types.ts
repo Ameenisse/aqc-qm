@@ -61,6 +61,7 @@ export interface Competition {
   finished_screen_duration: number; // default 3 seconds
   finished_screen_duration_seconds?: number;
   finished_performance_text: string;
+  performance_timer_enabled?: boolean;
   created_at?: string;
   updated_at?: string;
 }

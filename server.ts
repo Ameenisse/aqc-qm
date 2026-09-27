@@ -178,18 +178,23 @@ export function getHydratedStageState() {
   if (!comp) {
     comp = db.prepare('SELECT * FROM competitions LIMIT 1').get() as any;
   }
+  const isPerfTimerEnabled = comp ? (comp.performance_timer_enabled !== undefined && comp.performance_timer_enabled !== null ? Boolean(comp.performance_timer_enabled) : true) : true;
   const formattedComp = comp ? {
     ...comp,
     audience_quran_visibility: Boolean(comp.audience_quran_visibility),
     tilawa_podium_quran_visibility: Boolean(comp.tilawa_podium_quran_visibility),
     hifz_podium_answer_visibility: Boolean(comp.hifz_podium_answer_visibility),
+    performance_timer_enabled: isPerfTimerEnabled,
     audience_background_url: comp.audience_background_url || '',
     audience_background_overlay: comp.audience_background_overlay !== null && comp.audience_background_overlay !== undefined ? Number(comp.audience_background_overlay) : 65,
     finished_screen_duration_seconds: comp.finished_screen_duration ?? 3
   } : null;
 
+  const effectiveTimerMode = isPerfTimerEnabled ? (row.timer_mode && row.timer_mode !== 'disabled' ? row.timer_mode : 'stopwatch') : 'disabled';
+
   return {
     ...row,
+    timer_mode: effectiveTimerMode,
     question_selection_enabled: Boolean(row.question_selection_enabled),
     current_participant: participant,
     selected_question: selectedQuestion,
@@ -252,6 +257,7 @@ app.get('/api/competition', (req, res) => {
     audience_quran_visibility: Boolean(comp.audience_quran_visibility),
     tilawa_podium_quran_visibility: Boolean(comp.tilawa_podium_quran_visibility),
     hifz_podium_answer_visibility: Boolean(comp.hifz_podium_answer_visibility),
+    performance_timer_enabled: comp.performance_timer_enabled !== undefined && comp.performance_timer_enabled !== null ? Boolean(comp.performance_timer_enabled) : true,
     audience_background_url: comp.audience_background_url || '',
     audience_background_overlay: comp.audience_background_overlay !== null && comp.audience_background_overlay !== undefined ? Number(comp.audience_background_overlay) : 65,
     finished_screen_duration_seconds: comp.finished_screen_duration ?? 3
@@ -271,6 +277,9 @@ app.put('/api/competition', (req, res) => {
 
   const audienceBgUrl = b.audience_background_url !== undefined ? b.audience_background_url : (current?.audience_background_url || '');
   const audienceBgOverlay = b.audience_background_overlay !== undefined ? Number(b.audience_background_overlay) : (current?.audience_background_overlay ?? 65);
+  const perfTimerEnabled = b.performance_timer_enabled !== undefined
+    ? (b.performance_timer_enabled ? 1 : 0)
+    : (current?.performance_timer_enabled !== undefined && current?.performance_timer_enabled !== null ? current.performance_timer_enabled : 1);
 
   transaction(() => {
     db.prepare(`
@@ -281,7 +290,7 @@ app.put('/api/competition', (req, res) => {
           audience_quran_visibility = ?, tilawa_podium_quran_visibility = ?,
           hifz_podium_answer_visibility = ?, finished_screen_duration = ?,
           finished_performance_text = ?, audience_background_url = ?,
-          audience_background_overlay = ?, updated_at = CURRENT_TIMESTAMP
+          audience_background_overlay = ?, performance_timer_enabled = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `).run(
       b.name !== undefined ? b.name : (current?.name || ''),
@@ -302,8 +311,15 @@ app.put('/api/competition', (req, res) => {
       b.finished_performance_text || current?.finished_performance_text || 'ނިމުނީ / Performance Finished',
       audienceBgUrl,
       audienceBgOverlay,
+      perfTimerEnabled,
       id
     );
+
+    // Keep stage_state timer_mode in sync
+    db.prepare(`
+      UPDATE stage_state
+      SET timer_mode = ?, updated_at = CURRENT_TIMESTAMP
+    `).run(perfTimerEnabled ? 'stopwatch' : 'disabled');
   });
 
   logAudit(b.user_id || 'admin', 'ADMIN', 'UPDATE_SETTINGS', 'COMPETITION', 'competitions', id, '', JSON.stringify(b));
@@ -316,6 +332,7 @@ app.put('/api/competition', (req, res) => {
       audience_quran_visibility: Boolean(updatedComp.audience_quran_visibility),
       tilawa_podium_quran_visibility: Boolean(updatedComp.tilawa_podium_quran_visibility),
       hifz_podium_answer_visibility: Boolean(updatedComp.hifz_podium_answer_visibility),
+      performance_timer_enabled: Boolean(updatedComp.performance_timer_enabled ?? 1),
       audience_background_url: updatedComp.audience_background_url || '',
       audience_background_overlay: updatedComp.audience_background_overlay !== null && updatedComp.audience_background_overlay !== undefined ? Number(updatedComp.audience_background_overlay) : 65,
       finished_screen_duration_seconds: updatedComp.finished_screen_duration ?? 3
@@ -376,6 +393,8 @@ app.put('/api/competitions/:id', (req, res) => {
       : (b.finished_screen_duration !== undefined ? b.finished_screen_duration : 3)
   );
 
+  const perfTimerEnabled = b.performance_timer_enabled !== undefined ? (b.performance_timer_enabled ? 1 : 0) : 1;
+
   transaction(() => {
     db.prepare(`
       UPDATE competitions
@@ -384,7 +403,7 @@ app.put('/api/competitions/:id', (req, res) => {
           end_date = ?, description = ?, contact_details = ?,
           audience_quran_visibility = ?, tilawa_podium_quran_visibility = ?,
           hifz_podium_answer_visibility = ?, finished_screen_duration = ?,
-          finished_performance_text = ?, updated_at = CURRENT_TIMESTAMP
+          finished_performance_text = ?, performance_timer_enabled = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `).run(
       b.name, b.name_dhivehi, b.organization_name, b.organization_logo_url || '',
@@ -392,8 +411,13 @@ app.put('/api/competitions/:id', (req, res) => {
       b.end_date || '', b.description || '', b.contact_details || '',
       b.audience_quran_visibility ? 1 : 0, b.tilawa_podium_quran_visibility ? 1 : 0,
       b.hifz_podium_answer_visibility ? 1 : 0, finishedDuration,
-      b.finished_performance_text || 'ނިމުނީ / Performance Finished', id
+      b.finished_performance_text || 'ނިމުނީ / Performance Finished', perfTimerEnabled, id
     );
+
+    db.prepare(`
+      UPDATE stage_state
+      SET timer_mode = ?, updated_at = CURRENT_TIMESTAMP
+    `).run(perfTimerEnabled ? 'stopwatch' : 'disabled');
   });
   logAudit(b.user_id || 'admin', 'ADMIN', 'UPDATE_SETTINGS', 'COMPETITION', 'competitions', id, '', JSON.stringify(b));
   broadcastEvent('STAGE_STATE_UPDATED', getHydratedStageState());
@@ -410,9 +434,27 @@ app.post('/api/competition/upload-logo', (req, res) => {
     const buffer = Buffer.from(base64Data, 'base64');
 
     const publicPath = path.join(process.cwd(), 'public');
-    fs.writeFileSync(path.join(publicPath, 'app-logo.png'), buffer);
-    fs.writeFileSync(path.join(publicPath, 'pwa-512x512.png'), buffer);
-    fs.writeFileSync(path.join(publicPath, 'apple-touch-icon.png'), buffer);
+    const iconFilenames = [
+      'app-logo.png',
+      'pwa-192x192.png',
+      'pwa-512x512.png',
+      'pwa-maskable-512x512.png',
+      'apple-touch-icon.png',
+      'favicon.png'
+    ];
+
+    for (const filename of iconFilenames) {
+      fs.writeFileSync(path.join(publicPath, filename), buffer);
+    }
+
+    const distPath = path.join(process.cwd(), 'dist');
+    if (fs.existsSync(distPath)) {
+      for (const filename of iconFilenames) {
+        try {
+          fs.writeFileSync(path.join(distPath, filename), buffer);
+        } catch (_) {}
+      }
+    }
 
     const compRow = db.prepare('SELECT id FROM competitions LIMIT 1').get() as any;
     const targetCompId = compRow ? compRow.id : 'comp-1';
@@ -1296,6 +1338,108 @@ app.post('/api/stage/question-select', (req, res) => {
   res.json({ success: true, question: selectedQ, state });
 });
 
+// OPERATOR / ADMIN: RESET PREVIOUS OR CURRENT PICKED QUESTION NUMBER
+app.post('/api/stage/question-reset', (req, res) => {
+  const { question_number, question_id, reset_all, operator_id, user_id } = req.body;
+  const stage = db.prepare('SELECT * FROM stage_state LIMIT 1').get() as any;
+  if (!stage) {
+    return res.status(404).json({ error: 'Stage not found.' });
+  }
+
+  const participant = stage.participant_id
+    ? db.prepare('SELECT * FROM participants WHERE id = ?').get(stage.participant_id) as any
+    : null;
+
+  const compId = stage.competition_id || 'comp-1';
+  let resetCount = 0;
+  let affectedQuestionNumber = question_number || '';
+
+  try {
+    transaction(() => {
+      if (reset_all) {
+        if (participant) {
+          const resUp = db.prepare('UPDATE questions SET used = 0, updated_at = CURRENT_TIMESTAMP WHERE competition_id = ? AND grade_id = ? AND branch_id = ?').run(compId, participant.grade_id, participant.branch_id);
+          resetCount = Number(resUp.changes);
+          db.prepare(`
+            UPDATE question_usage
+            SET reset_at = CURRENT_TIMESTAMP
+            WHERE reset_at IS NULL AND question_id IN (
+              SELECT id FROM questions WHERE competition_id = ? AND grade_id = ? AND branch_id = ?
+            )
+          `).run(compId, participant.grade_id, participant.branch_id);
+        } else {
+          const resUp = db.prepare('UPDATE questions SET used = 0, updated_at = CURRENT_TIMESTAMP WHERE competition_id = ?').run(compId);
+          resetCount = Number(resUp.changes);
+          db.prepare('UPDATE question_usage SET reset_at = CURRENT_TIMESTAMP WHERE reset_at IS NULL').run();
+        }
+
+        // If stage currently has an active question, un-select it and return to selection
+        if (stage.active_question_id) {
+          db.prepare(`
+            UPDATE stage_state
+            SET active_question_id = NULL, question_selection_enabled = 1,
+                stage_status = CASE WHEN stage_status IN ('QUESTION_SELECTED', 'READY') THEN 'QUESTION_SELECTION_ALLOWED' ELSE stage_status END,
+                display_state = CASE WHEN display_state = 'QUESTION' THEN 'GRID' ELSE display_state END,
+                updated_at = CURRENT_TIMESTAMP
+          `).run();
+          if (stage.performance_session_id) {
+            db.prepare('UPDATE performance_sessions SET active_question_id = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(stage.performance_session_id);
+          }
+        }
+      } else {
+        // Reset a specific question (by id, number, or current active)
+        let targetQ: any = null;
+        if (question_id) {
+          targetQ = db.prepare('SELECT * FROM questions WHERE id = ?').get(question_id) as any;
+        } else if (question_number && participant) {
+          targetQ = db.prepare('SELECT * FROM questions WHERE competition_id = ? AND grade_id = ? AND branch_id = ? AND question_number = ?').get(compId, participant.grade_id, participant.branch_id, question_number) as any;
+          if (!targetQ) {
+            targetQ = db.prepare('SELECT * FROM questions WHERE competition_id = ? AND question_number = ? LIMIT 1').get(compId, question_number) as any;
+          }
+        } else if (question_number) {
+          targetQ = db.prepare('SELECT * FROM questions WHERE competition_id = ? AND question_number = ? LIMIT 1').get(compId, question_number) as any;
+        } else if (stage.active_question_id) {
+          targetQ = db.prepare('SELECT * FROM questions WHERE id = ?').get(stage.active_question_id) as any;
+        }
+
+        if (targetQ) {
+          affectedQuestionNumber = targetQ.question_number;
+          db.prepare('UPDATE questions SET used = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(targetQ.id);
+          db.prepare('UPDATE question_usage SET reset_at = CURRENT_TIMESTAMP WHERE question_id = ? AND reset_at IS NULL').run(targetQ.id);
+          resetCount = 1;
+
+          // If the reset question was currently active on stage, clear it and allow picking again
+          if (stage.active_question_id === targetQ.id) {
+            db.prepare(`
+              UPDATE stage_state
+              SET active_question_id = NULL, question_selection_enabled = 1,
+                  stage_status = CASE WHEN stage_status IN ('QUESTION_SELECTED', 'READY') THEN 'QUESTION_SELECTION_ALLOWED' ELSE stage_status END,
+                  display_state = CASE WHEN display_state = 'QUESTION' THEN 'GRID' ELSE display_state END,
+                  updated_at = CURRENT_TIMESTAMP
+            `).run();
+            if (stage.performance_session_id) {
+              db.prepare('UPDATE performance_sessions SET active_question_id = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(stage.performance_session_id);
+            }
+          }
+        } else if (question_number) {
+          const resUp = db.prepare('UPDATE questions SET used = 0, updated_at = CURRENT_TIMESTAMP WHERE competition_id = ? AND question_number = ?').run(compId, question_number);
+          resetCount = Number(resUp.changes);
+        }
+      }
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Failed to reset question.' });
+  }
+
+  const actor = operator_id || user_id || 'operator';
+  logAudit(actor, 'PRESENTATION_OPERATOR', 'RESET_QUESTION', 'STAGE', 'question', affectedQuestionNumber || 'all', '', '', `Operator reset question: ${affectedQuestionNumber || 'all'}`);
+
+  const state = getHydratedStageState();
+  broadcastEvent('QUESTION_RESET', { question_number: affectedQuestionNumber, state });
+  broadcastEvent('STAGE_STATE_UPDATED', state);
+  res.json({ success: true, resetCount, question_number: affectedQuestionNumber, state });
+});
+
 // Section 33: MARK STAGE READY (QUESTION_SELECTED -> READY)
 app.post('/api/stage/ready', (req, res) => {
   const stage = db.prepare('SELECT * FROM stage_state LIMIT 1').get() as any;
@@ -1341,13 +1485,18 @@ app.post('/api/stage/start', (req, res) => {
     });
   }
 
+  const comp = db.prepare('SELECT performance_timer_enabled FROM competitions WHERE id = ?').get(stage.competition_id) as any;
+  const isTimerEnabled = comp ? (comp.performance_timer_enabled !== undefined && comp.performance_timer_enabled !== null ? Boolean(comp.performance_timer_enabled) : true) : true;
   const now = new Date().toISOString();
+  const timerStartedAt = isTimerEnabled ? now : null;
+  const timerMode = isTimerEnabled ? 'stopwatch' : 'disabled';
+
   transaction(() => {
     db.prepare(`
       UPDATE stage_state
-      SET stage_status = 'PERFORMING', timer_started_at = ?, timer_paused_at = NULL,
+      SET stage_status = 'PERFORMING', timer_mode = ?, timer_started_at = ?, timer_paused_at = NULL,
           display_state = 'PERFORMING', updated_at = CURRENT_TIMESTAMP
-    `).run(now);
+    `).run(timerMode, timerStartedAt);
 
     if (stage.performance_session_id) {
       db.prepare(`
@@ -1580,13 +1729,18 @@ app.post('/api/stage/transition', (req, res) => {
     }
 
     case 'PERFORMING': {
+      const comp = db.prepare('SELECT performance_timer_enabled FROM competitions WHERE id = ?').get(stage.competition_id) as any;
+      const isTimerEnabled = comp ? (comp.performance_timer_enabled !== undefined && comp.performance_timer_enabled !== null ? Boolean(comp.performance_timer_enabled) : true) : true;
       const now = new Date().toISOString();
+      const timerStartedAt = isTimerEnabled ? now : null;
+      const timerMode = isTimerEnabled ? 'stopwatch' : 'disabled';
+
       transaction(() => {
         db.prepare(`
           UPDATE stage_state
-          SET stage_status = 'PERFORMING', timer_started_at = ?, timer_paused_at = NULL,
+          SET stage_status = 'PERFORMING', timer_mode = ?, timer_started_at = ?, timer_paused_at = NULL,
               display_state = 'PERFORMING', updated_at = CURRENT_TIMESTAMP
-        `).run(now);
+        `).run(timerMode, timerStartedAt);
         if (stage.performance_session_id) {
           db.prepare(`UPDATE performance_sessions SET started_at = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`).run(now, stage.performance_session_id);
         }

@@ -40,6 +40,7 @@ interface CompetitionContextType {
   callParticipant: (participantId: string) => Promise<boolean>;
   allowQuestionSelection: () => Promise<boolean>;
   selectQuestion: (questionNumber: string, method?: 'PODIUM' | 'OPERATOR_OVERRIDE') => Promise<{ success: boolean; error?: string }>;
+  resetQuestion: (questionNumber?: string, questionId?: string, resetAll?: boolean) => Promise<{ success: boolean; error?: string }>;
   setReady: () => Promise<boolean>;
   startPerformance: () => Promise<boolean>;
   pauseResumeTimer: (action: 'pause' | 'resume' | 'reset', offset?: number) => Promise<boolean>;
@@ -352,6 +353,40 @@ export const CompetitionProvider: React.FC<{ children: ReactNode }> = ({ childre
     }
   };
 
+  // Reset previously picked or current question
+  const resetQuestion = async (
+    questionNumber?: string,
+    questionId?: string,
+    resetAll?: boolean
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      setLastError(null);
+      const res = await fetch('/api/stage/question-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question_number: questionNumber,
+          question_id: questionId,
+          reset_all: resetAll,
+          operator_id: user?.id
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (data.state) setStageState(data.state);
+        else await fetchStage();
+        return { success: true };
+      }
+      const err = data.error || 'Failed to reset question.';
+      setLastError(err);
+      return { success: false, error: err };
+    } catch (e: any) {
+      const err = e.message || 'Network error resetting question.';
+      setLastError(err);
+      return { success: false, error: err };
+    }
+  };
+
   // 4. QUESTION_SELECTED -> READY
   const setReady = async (): Promise<boolean> => {
     try {
@@ -568,6 +603,7 @@ export const CompetitionProvider: React.FC<{ children: ReactNode }> = ({ childre
         callParticipant,
         allowQuestionSelection,
         selectQuestion,
+        resetQuestion,
         setReady,
         startPerformance,
         pauseResumeTimer,
